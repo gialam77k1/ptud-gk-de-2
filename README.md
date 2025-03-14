@@ -26,15 +26,13 @@
 
 ## Cài đặt
 
-<<<<<<< HEAD
 ### Yêu cầu hệ thống
 
 - Python 3.8+
 - pip
 
 ### Các bước cài đặt
-=======
->>>>>>> 3c250be9c584689be5c1ffa1b99df9900ebd7691
+
 
 1. Clone repository:
 ```
@@ -42,14 +40,16 @@ git clone https://github.com/gialam77k1/ptud-gk-de-2.git
 cd ptud-gk-de-2
 ```
 
-<<<<<<< HEAD
 2. Tạo môi trường ảo:
 ```
 python -m venv venv
-source venv/bin/activate  # Trên Windows: venv\Scripts\activate
+venv\Scripts\activate
 ```
 
 3. Cài đặt dependencies:
+```
+python.exe -m pip install --upgrade pip
+```
 ```
 pip install -r requirements.txt
 ```
