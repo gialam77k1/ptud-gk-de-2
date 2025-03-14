@@ -100,7 +100,7 @@ Sau khi đã cài đặt, bạn có thể chạy lại ứng dụng bằng cách
 2. Đăng ký tài khoản mới hoặc đăng nhập với tài khoản có sẵn
 3. Tài khoản admin mặc định:
    - Tên đăng nhập: admin
-   - Mật khẩu: admin123
+   - Mật khẩu: admin
 
 ## Cấu trúc dự án
 
