@@ -1,90 +1,27 @@
-<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng Nhập</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f5f5f5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-      .login-card {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        width: 300px;
-      }
-      h2 {
-        color: #333;
-        text-align: center;
-      }
-      form {
-        display: flex;
-        flex-direction: column;
-      }
-      input,
-      button {
-        margin: 10px 0;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
-      button {
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #45a049;
-      }
-      .links {
-        text-align: center;
-        margin-top: 15px;
-      }
-      .links a {
-        color: #4caf50;
-        text-decoration: none;
-      }
-      .error-message {
-        color: #f44336;
-        text-align: center;
-        margin-bottom: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="login-card">
-      <h2>Đăng Nhập</h2>
-      {% if error %}
-      <div class="error-message">{{ error }}</div>
-      {% endif %}
-      <form method="POST">
-        <input
-          type="text"
-          name="username"
-          placeholder="Tên đăng nhập"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Mật khẩu"
-          required
-        />
-        <button type="submit">Đăng Nhập</button>
-      </form>
-      <div class="links">
-        <a href="{{ url_for('register') }}">Chưa có tài khoản? Đăng ký ngay</a>
-      </div>
+{% extends 'base.html' %}
+
+{% block title %}Đăng nhập{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Đăng nhập</h3>
     </div>
-  </body>
-</html>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="username" name="username" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+        </form>
+    </div>
+    <div class="card-footer text-center">
+        <p class="mb-0">Chưa có tài khoản? <a href="{{ url_for('register') }}">Đăng ký</a></p>
+    </div>
+</div>
+{% endblock %}

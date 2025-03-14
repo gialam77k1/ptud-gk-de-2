@@ -1,320 +1,74 @@
-<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hồ Sơ Cá Nhân</title>
-    <style>
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f8f9fa;
-        color: #343a40;
-      }
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      .card {
-        background-color: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        padding: 25px;
-        margin-bottom: 25px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-      }
-      .header-card {
-        position: relative;
-        text-align: center;
-      }
-      .logout-btn {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        color: #f44336;
-        text-decoration: none;
-        padding: 10px 18px;
-        border: 1px solid #f44336;
-        border-radius: 8px;
-        transition: all 0.3s;
-        font-weight: 600;
-        font-size: 14px;
-      }
-      .logout-btn:hover {
-        background-color: #f44336;
-        color: white;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
-      h1 {
-        color: #333;
-        text-align: center;
-        margin-bottom: 20px;
-        font-weight: 600;
-        font-size: 28px;
-      }
-      .profile-section {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 30px;
-      }
-      .avatar-container {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        overflow: hidden;
-        margin-bottom: 20px;
-        border: 4px solid #4caf50;
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .avatar-container:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      }
-      .avatar-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      .user-info {
-        text-align: center;
-      }
-      .user-info h2 {
-        margin-bottom: 5px;
-        color: #333;
-        font-weight: 600;
-        font-size: 24px;
-      }
-      .user-info p {
-        color: #757575;
-        margin-top: 0;
-        font-size: 16px;
-      }
-      .upload-form {
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-      }
-      .form-group {
-        margin-bottom: 20px;
-      }
-      .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #333;
-      }
-      .form-group input[type="file"] {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        background-color: #f8f9fa;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      }
-      .form-group input[type="file"]:focus {
-        border-color: #4caf50;
-        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-        outline: none;
-      }
-      .btn {
-        display: inline-block;
-        padding: 12px 20px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        font-weight: 600;
-        font-size: 14px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      }
-      .btn:hover {
-        background-color: #388e3c;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      }
-      .btn:active {
-        transform: translateY(0);
-      }
-      .error-message {
-        color: #f44336;
-        margin-bottom: 15px;
-        padding: 10px 15px;
-        background-color: #ffebee;
-        border-radius: 8px;
-        border-left: 4px solid #f44336;
-      }
-      .back-link {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
-        color: #4caf50;
-        text-decoration: none;
-        transition: color 0.3s;
-        font-weight: 600;
-      }
-      .back-link:hover {
-        color: #388e3c;
-        text-decoration: underline;
-      }
-      .cards-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 25px;
-      }
-      .card h3 {
-        color: #333;
-        margin-top: 0;
-        margin-bottom: 20px;
-        border-bottom: 1px solid #f0f0f0;
-        padding-bottom: 15px;
-        font-weight: 600;
-        font-size: 20px;
-      }
-      .info-item {
-        padding: 12px 0;
-        border-bottom: 1px solid #f0f0f0;
-      }
-      .info-item:last-child {
-        border-bottom: none;
-      }
-      .info-item strong {
-        color: #333;
-        font-weight: 600;
-      }
-      .role-badge {
-        display: inline-block;
-        padding: 4px 10px;
-        border-radius: 15px;
-        font-size: 12px;
-        font-weight: 600;
-        margin-left: 8px;
-      }
-      .role-admin {
-        background-color: #ffebee;
-        color: #c62828;
-      }
-      .role-user {
-        background-color: #e8f5e9;
-        color: #2e7d32;
-      }
-      .nav-links {
-        display: flex;
-        justify-content: center;
-        margin-top: 15px;
-      }
-      .nav-links a {
-        margin: 0 12px;
-        text-decoration: none;
-        color: #4caf50;
-        font-weight: 600;
-        padding: 8px 15px;
-        border-radius: 20px;
-        transition: all 0.3s ease;
-      }
-      .nav-links a:hover {
-        background-color: #e8f5e9;
-        color: #2e7d32;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="card header-card">
-        <a href="{{ url_for('logout') }}" class="logout-btn">Đăng xuất</a>
-        <h1>Hồ Sơ Cá Nhân</h1>
+{% extends 'base.html' %}
 
-        <div class="profile-section">
-          <div class="avatar-container">
-            {% if user.avatar %}
-            <img
-              src="{{ url_for('uploaded_file', filename=user.avatar) }}"
-              alt="Avatar"
-            />
-            {% else %}
-            <img
-              src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-              alt="Avatar mặc định"
-            />
-            {% endif %}
-          </div>
+{% block title %}Hồ sơ cá nhân{% endblock %}
 
-          <div class="user-info">
-            <h2>{{ user.username }}</h2>
-            <p>Vai trò: {{ user.role }} 
-              <span class="role-badge {% if user.role == 'admin' %}role-admin{% else %}role-user{% endif %}">
-                {{ user.role }}
-              </span>
-            </p>
-          </div>
-          
-          <div class="nav-links">
-            <a href="{{ url_for('dashboard') }}">Bảng Điều Khiển</a>
-            {% if user.role == 'admin' %}
-            <a href="{{ url_for('admin_dashboard') }}">Quản Trị</a>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-
-      <div class="cards-container">
-        <div class="card">
-          <h3>Cập nhật Avatar</h3>
-
-          {% if error %}
-          <div class="error-message">{{ error }}</div>
-          {% endif %}
-
-          <form method="POST" enctype="multipart/form-data" class="upload-form">
-            <div class="form-group">
-              <label for="avatar">Chọn ảnh avatar mới:</label>
-              <input
-                type="file"
-                id="avatar"
-                name="avatar"
-                accept="image/*"
-                required
-              />
-            </div>
-            <button type="submit" class="btn">Cập nhật</button>
-          </form>
-        </div>
-
-        <div class="card">
-          <h3>Thông tin tài khoản</h3>
-          <div class="info-item">
-            <strong>Tên đăng nhập:</strong> {{ user.username }}
-          </div>
-          <div class="info-item">
-            <strong>Vai trò:</strong> {{ user.role }}
-            <span class="role-badge {% if user.role == 'admin' %}role-admin{% else %}role-user{% endif %}">
-              {{ user.role }}
-            </span>
-          </div>
-          <div class="info-item">
-            <strong>Trạng thái:</strong> 
-            {% if user.is_blocked %}
-            <span style="color: #f44336; font-weight: 600;">Đã khóa</span>
-            {% else %}
-            <span style="color: #4caf50; font-weight: 600;">Hoạt động</span>
-            {% endif %}
-          </div>
-          <div style="margin-top: 20px;">
-            <a href="{{ url_for('dashboard') }}" class="btn">Quay lại Bảng Điều Khiển</a>
-          </div>
-        </div>
-      </div>
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Hồ sơ cá nhân</h3>
     </div>
-  </body>
-</html>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 text-center mb-4">
+                <img src="{{ url_for('static', filename='uploads/' + current_user.avatar) }}" alt="Avatar" class="profile-avatar mb-3">
+                <h4>{{ current_user.username }}</h4>
+                <p class="text-muted">
+                    <span class="badge {% if current_user.role == 'admin' %}bg-danger{% else %}bg-secondary{% endif %}">
+                        {{ current_user.role|capitalize }}
+                    </span>
+                </p>
+            </div>
+            <div class="col-md-8">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="avatar" class="form-label">Thay đổi ảnh đại diện</label>
+                        <input type="file" class="form-control" id="avatar" name="avatar" accept=".png, .jpg, .jpeg, .gif">
+                        <div class="form-text">Cho phép các định dạng: JPG, JPEG, PNG, GIF</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </form>
+                
+                <hr>
+                
+                <div class="mt-4">
+                    <h5>Thống kê</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Tổng số công việc</h6>
+                                    <p class="card-text display-6">{{ current_user.tasks|length }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Công việc hoàn thành</h6>
+                                    <p class="card-text display-6">{{ current_user.tasks|selectattr('status', 'equalto', 'completed')|list|length }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Đang thực hiện</h6>
+                                    <p class="card-text display-6">{{ current_user.tasks|selectattr('status', 'equalto', 'in_progress')|list|length }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Trễ hạn</h6>
+                                    <p class="card-text display-6">{{ overdue_tasks if overdue_tasks is defined else 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,306 +1,95 @@
-<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chỉnh Sửa Nhiệm Vụ</title>
-    <style>
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f8f9fa;
-        color: #343a40;
-      }
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      .header {
-        background-color: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        padding: 25px;
-        margin-bottom: 25px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .header:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-      }
-      .user-info {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        display: flex;
-        align-items: center;
-      }
-      .avatar {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        overflow: hidden;
-        margin-right: 12px;
-        border: 3px solid #4caf50;
-        position: relative;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-      }
-      .avatar:hover {
-        transform: scale(1.1);
-      }
-      .avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      .overdue-badge {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        background-color: #f44336;
-        color: white;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 12px;
-        font-weight: bold;
-      }
-      .user-actions {
-        display: flex;
-        flex-direction: column;
-      }
-      .user-actions a {
-        margin-bottom: 5px;
-        text-decoration: none;
-        font-size: 13px;
-        transition: color 0.2s ease;
-      }
-      .profile-link {
-        color: #4caf50;
-      }
-      .profile-link:hover {
-        color: #388e3c;
-        text-decoration: underline;
-      }
-      .logout-btn {
-        color: #f44336;
-      }
-      .logout-btn:hover {
-        color: #d32f2f;
-        text-decoration: underline;
-      }
-      .nav-links {
-        display: flex;
-        margin-top: 15px;
-      }
-      .nav-links a {
-        margin: 0 12px;
-        text-decoration: none;
-        color: #4caf50;
-        font-weight: 600;
-        padding: 8px 15px;
-        border-radius: 20px;
-        transition: all 0.3s ease;
-      }
-      .nav-links a:hover {
-        background-color: #e8f5e9;
-        color: #2e7d32;
-      }
-      h1 {
-        color: #333;
-        text-align: center;
-        margin-bottom: 20px;
-        font-weight: 600;
-        font-size: 28px;
-      }
-      .edit-form-card {
-        background-color: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        padding: 25px;
-        margin-bottom: 25px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .edit-form-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-      }
-      .edit-form {
-        display: flex;
-        flex-direction: column;
-      }
-      .form-group {
-        margin-bottom: 20px;
-      }
-      .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #333;
-      }
-      .form-group input[type="text"],
-      .form-group input[type="datetime-local"] {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 14px;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      }
-      .form-group input[type="text"]:focus,
-      .form-group input[type="datetime-local"]:focus {
-        border-color: #4caf50;
-        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-        outline: none;
-      }
-      .form-actions {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-      }
-      .form-actions button {
-        padding: 12px 20px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        font-size: 14px;
-      }
-      .form-actions button:hover {
-        background-color: #388e3c;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
-      .form-actions button:active {
-        transform: translateY(0);
-      }
-      .form-actions .cancel-btn {
-        background-color: #f5f5f5;
-        color: #333;
-      }
-      .form-actions .cancel-btn:hover {
-        background-color: #e0e0e0;
-      }
-      .form-actions .delete-btn {
-        background-color: #f44336;
-      }
-      .form-actions .delete-btn:hover {
-        background-color: #d32f2f;
-      }
-      .task-info {
-        background-color: #e8f5e9;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 20px;
-        border-left: 4px solid #4caf50;
-      }
-      .task-info p {
-        margin: 5px 0;
-        font-size: 14px;
-        color: #333;
-      }
-      .task-info .label {
-        font-weight: 600;
-        color: #2e7d32;
-      }
-      .overdue-alert {
-        background-color: #ffebee;
-        color: #c62828;
-        padding: 10px 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .overdue-alert i {
-        margin-right: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <div class="user-info">
-          <div class="avatar">
-            {% if current_user.avatar %}
-            <img
-              src="{{ current_user.avatar }}"
-              alt="Avatar"
-            />
-            {% else %}
-            <img
-              src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-              alt="Avatar mặc định"
-            />
-            {% endif %}
-            {% if overdue_count > 0 %}
-            <div class="overdue-badge" title="{{ overdue_count }} công việc trễ hạn">{{ overdue_count }}</div>
-            {% endif %}
-          </div>
-          <div class="user-actions">
-            <a href="{{ url_for('profile') }}" class="profile-link">Hồ sơ</a>
-            <a href="{{ url_for('logout') }}" class="logout-btn">Đăng xuất</a>
-          </div>
-        </div>
-        <h1>Chỉnh Sửa Nhiệm Vụ</h1>
-        <div class="nav-links">
-          <a href="{{ url_for('dashboard') }}">Bảng Điều Khiển</a>
-        </div>
-      </div>
+{% extends 'base.html' %}
 
-      {% if overdue_count > 0 %}
-      <div class="overdue-alert">
-        <div>
-          <i class="fas fa-exclamation-circle"></i>
-          Bạn có {{ overdue_count }} công việc đã quá hạn cần xử lý!
-        </div>
-      </div>
-      {% endif %}
+{% block title %}Chỉnh sửa công việc{% endblock %}
 
-      <div class="edit-form-card">
-        <form method="POST">
-          <div class="form-group">
-            <label for="title">Tiêu đề</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              class="form-control"
-              value="{{ task.title }}"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="deadline">Thời hạn</label>
-            <input
-              type="datetime-local"
-              id="deadline"
-              name="deadline"
-              class="form-control"
-              value="{% if task.deadline %}{{ task.deadline|adjust_timezone|strftime('%Y-%m-%dT%H:%M') }}{% endif %}"
-            />
-          </div>
-          <div class="form-actions">
-            <a href="{{ url_for('dashboard') }}" class="btn btn-cancel"
-              >Hủy bỏ</a
-            >
-            <button type="submit" class="btn">Lưu thay đổi</button>
-          </div>
-        </form>
-      </div>
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Chỉnh sửa công việc</h3>
     </div>
-  </body>
-</html> 
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ task.title }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Mô tả</label>
+                <textarea class="form-control" id="description" name="description" rows="3">{{ task.description }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Trạng thái</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="pending" {% if task.status == 'pending' %}selected{% endif %}>Chờ xử lý</option>
+                    <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>Đang thực hiện</option>
+                    <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Hoàn thành</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="deadline" class="form-label">Thời hạn</label>
+                <input type="datetime-local" class="form-control" id="deadline" name="deadline" 
+                    value="{{ task.deadline.strftime('%Y-%m-%dT%H:%M') if task.deadline else '' }}">
+            </div>
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Ngày tạo:</strong> {{ task.created.strftime('%d/%m/%Y %H:%M') }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        {% if task.finished %}
+                        <p><strong>Ngày hoàn thành:</strong> {{ task.finished.strftime('%d/%m/%Y %H:%M') }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Quay lại</a>
+                <div>
+                    <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteTaskModal">
+                        <i class="fas fa-trash me-1"></i> Xóa
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Lưu thay đổi
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa công việc "<strong>{{ task.title }}</strong>"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST">
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Cập nhật trạng thái UI dựa vào lựa chọn
+    document.getElementById('status').addEventListener('change', function() {
+        if (this.value === 'completed') {
+            // Hiển thị thông báo khi đánh dấu hoàn thành
+            if (!confirm('Bạn có chắc chắn muốn đánh dấu công việc này là hoàn thành?')) {
+                // Nếu người dùng hủy, quay lại trạng thái trước đó
+                this.value = '{{ task.status }}';
+            }
+        }
+    });
+</script>
+{% endblock %}

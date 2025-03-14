@@ -1,172 +1,32 @@
-<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng Ký</title>
-    <style>
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f8f9fa;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-      }
-      .register-card {
-        background-color: white;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        padding: 30px;
-        width: 400px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .register-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-      }
-      h2 {
-        color: #333;
-        text-align: center;
-        margin-bottom: 25px;
-        font-weight: 600;
-        font-size: 24px;
-      }
-      form {
-        display: flex;
-        flex-direction: column;
-      }
-      input {
-        margin: 10px 0;
-        padding: 15px 20px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 16px;
-        width: 100%;
-        box-sizing: border-box;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      }
-      input:focus {
-        border-color: #4caf50;
-        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-        outline: none;
-      }
-      button {
-        margin: 20px 0 10px;
-        padding: 12px 15px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 15px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      }
-      button:hover {
-        background-color: #388e3c;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      }
-      button:active {
-        transform: translateY(0);
-      }
-      .links {
-        text-align: center;
-        margin-top: 20px;
-      }
-      .links a {
-        color: #4caf50;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s ease;
-      }
-      .links a:hover {
-        color: #388e3c;
-        text-decoration: underline;
-      }
-      .error-message {
-        color: #f44336;
-        text-align: center;
-        margin-bottom: 15px;
-        padding: 10px;
-        background-color: #ffebee;
-        border-radius: 8px;
-        border-left: 4px solid #f44336;
-        font-size: 14px;
-      }
-      .app-title {
-        text-align: center;
-        margin-bottom: 10px;
-        color: #4caf50;
-        font-weight: 700;
-        font-size: 28px;
-      }
-      .app-subtitle {
-        text-align: center;
-        margin-bottom: 25px;
-        color: #757575;
-        font-size: 14px;
-      }
-      .input-group {
-        position: relative;
-        margin-bottom: 15px;
-        width: 100%;
-      }
-      .input-icon {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #757575;
-      }
-      .input-with-icon {
-        padding-left: 35px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="register-card">
-      <div class="app-title">Task Manager</div>
-      <div class="app-subtitle">Quản lý công việc hiệu quả</div>
-      
-      <h2>Đăng Ký</h2>
-      
-      {% if error %}
-      <div class="error-message">{{ error }}</div>
-      {% endif %}
-      
-      <form method="POST">
-        <div class="input-group">
-          <input
-            type="text"
-            name="username"
-            placeholder="Tên đăng nhập"
-            required
-            class="input-with-icon"
-          />
-        </div>
-        
-        <div class="input-group">
-          <input
-            type="password"
-            name="password"
-            placeholder="Mật khẩu"
-            required
-            class="input-with-icon"
-          />
-        </div>
-        
-        <button type="submit">Đăng Ký</button>
-      </form>
-      
-      <div class="links">
-        <a href="{{ url_for('login') }}">Đã có tài khoản? Đăng nhập ngay</a>
-      </div>
+{% extends 'base.html' %}
+
+{% block title %}Đăng ký{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Đăng ký tài khoản</h3>
     </div>
-  </body>
-</html>
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="username" class="form-label">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="username" name="username" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="avatar" class="form-label">Ảnh đại diện (tùy chọn)</label>
+                <input type="file" class="form-control" id="avatar" name="avatar" accept=".png, .jpg, .jpeg, .gif">
+                <div class="form-text">Cho phép các định dạng: JPG, JPEG, PNG, GIF</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+        </form>
+    </div>
+    <div class="card-footer text-center">
+        <p class="mb-0">Đã có tài khoản? <a href="{{ url_for('login') }}">Đăng nhập</a></p>
+    </div>
+</div>
+{% endblock %}

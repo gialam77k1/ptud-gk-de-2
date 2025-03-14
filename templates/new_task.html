@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Thêm công việc mới{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Thêm công việc mới</h3>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="title" name="title" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Mô tả</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="deadline" class="form-label">Thời hạn</label>
+                <input type="datetime-local" class="form-control" id="deadline" name="deadline">
+            </div>
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Hủy</a>
+                <button type="submit" class="btn btn-primary">Tạo công việc</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
