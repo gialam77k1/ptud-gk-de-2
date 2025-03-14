@@ -40,7 +40,6 @@ git clone https://github.com/gialam77k1/ptud-gk-de-2.git
 cd ptud-gk-de-2
 ```
 
-<<<<<<< HEAD
 2. Tạo môi trường ảo:
 ```
 python -m venv venv
