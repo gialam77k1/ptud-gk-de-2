@@ -30,6 +30,11 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(20), default='user')  # 'admin' hoặc 'user'
     avatar = db.Column(db.String(200), default='default.png')
     tasks = db.relationship('Task', backref='user', lazy=True)
+    is_active = db.Column(db.Boolean, default=True)
+    
+    # Override phương thức is_active của UserMixin nếu cần
+    def get_is_active(self):
+        return self.is_active
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -76,11 +81,17 @@ def login():
         password = request.form.get('password')
         
         user = User.query.filter_by(username=username).first()
+        
         if user and check_password_hash(user.password, password):
+            if not user.is_active:
+                flash('Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.', 'danger')
+                return redirect(url_for('login'))
+                
             login_user(user)
+            flash('Đăng nhập thành công!', 'success')
             return redirect(url_for('dashboard'))
         else:
-            flash('Invalid username or password', 'danger')
+            flash('Tên đăng nhập hoặc mật khẩu không đúng!', 'danger')
     
     return render_template('login.html')
 
@@ -265,6 +276,78 @@ def admin_users():
     # Thêm datetime.now() vào ngữ cảnh render template
     from datetime import datetime
     return render_template('user_admin.html', users=users, now=datetime.now)
+
+@app.route('/admin/users/<int:user_id>/toggle-status', methods=['GET'])
+@login_required
+def toggle_user_status(user_id):
+    if current_user.role != 'admin':
+        flash('Bạn không có quyền thực hiện hành động này', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    user = User.query.get_or_404(user_id)
+    
+    # Không cho phép admin khóa chính mình
+    if user.id == current_user.id:
+        flash('Bạn không thể khóa tài khoản của chính mình', 'danger')
+        return redirect(url_for('admin_users'))
+    
+    # Đảo trạng thái is_active
+    user.is_active = not user.is_active
+    
+    # Lưu vào CSDL
+    db.session.commit()
+    
+    status_message = "khóa" if not user.is_active else "mở khóa"
+    flash(f'Đã {status_message} người dùng {user.username} thành công', 'success')
+    
+    return redirect(url_for('admin_users'))
+
+@app.route('/admin/users/<int:user_id>/delete', methods=['GET'])
+@login_required
+def delete_user(user_id):
+    if current_user.role != 'admin':
+        flash('Bạn không có quyền thực hiện hành động này', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    user = User.query.get_or_404(user_id)
+    
+    # Không cho phép admin xóa chính mình
+    if user.id == current_user.id:
+        flash('Bạn không thể xóa tài khoản của chính mình', 'danger')
+        return redirect(url_for('admin_users'))
+    
+    # Lưu tên người dùng để hiển thị thông báo
+    username = user.username
+    
+    # Có thể cần xử lý các công việc liên quan
+    # Option 1: Xóa tất cả công việc liên quan đến người dùng
+    # Task.query.filter_by(user_id=user.id).delete()
+    
+    # Option 2: Chuyển công việc sang tài khoản admin hoặc một người dùng khác
+    # tasks = Task.query.filter_by(user_id=user.id).all()
+    # for task in tasks:
+    #     task.user_id = admin_user_id  # ID của một admin hoặc người dùng khác
+    
+    # Xóa người dùng
+    db.session.delete(user)
+    db.session.commit()
+    
+    flash(f'Đã xóa người dùng {username} thành công', 'success')
+    
+    return redirect(url_for('admin_users'))
+
+@app.route('/admin/users/<int:user_id>')
+@login_required
+def user_detail(user_id):
+    if current_user.role != 'admin':
+        flash('Bạn không có quyền truy cập trang này', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    user = User.query.get_or_404(user_id)
+    from datetime import datetime
+    
+    return render_template('user_detail.html', user=user, now=datetime.now)
+
 
 @app.route('/logout')
 @login_required
