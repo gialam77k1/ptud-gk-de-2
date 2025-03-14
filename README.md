@@ -1,8 +1,8 @@
 # Thông tin cá nhân
 
-### Họ và tên: Nguyễn Gia LâmLâm
+### Họ và tên: Nguyễn Gia Lâm
 
-### MSSV: 226856115611
+### MSSV: 226856115
 
 ---
 
@@ -32,6 +32,7 @@
 4. **Lọc và sắp xếp**: Lọc nhiệm vụ theo danh mục, trạng thái và sắp xếp theo thời hạn
 5. **Hệ thống tài khoản**: Đăng ký, đăng nhập và quản lý hồ sơ cá nhân
 6. **Quản trị viên**: Trang quản lý riêng cho admin để quản lý người dùng
+7. **Hiển thị số task quá hạn**
 
 ## Công nghệ sử dụng
 
