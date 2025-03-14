@@ -45,7 +45,11 @@ cd ptud-gk-de-2
 python -m venv venv
 venv\Scripts\activate
 ```
-
+## Chạy bằng file shell script
+```
+.\run.ps1
+```
+## Chạy từng lệnh
 3. Cài đặt dependencies:
 ```
 python.exe -m pip install --upgrade pip
