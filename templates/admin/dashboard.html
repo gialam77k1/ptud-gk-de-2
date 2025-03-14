@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng Điều Khiển Admin</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .user-info {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+      }
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 10px;
+        border: 2px solid #4caf50;
+        position: relative;
+      }
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .overdue-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: #f44336;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .user-actions {
+        display: flex;
+        flex-direction: column;
+      }
+      .user-actions a {
+        margin-bottom: 5px;
+        text-decoration: none;
+        font-size: 12px;
+      }
+      .profile-link {
+        color: #4caf50;
+      }
+      .logout-btn {
+        color: #f44336;
+      }
+      .nav-links {
+        display: flex;
+        margin-top: 10px;
+      }
+      .nav-links a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: #4caf50;
+        font-weight: bold;
+      }
+      .admin-badge {
+        background-color: #f44336;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        margin-left: 10px;
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .task-form-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .task-form {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-row {
+        display: flex;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+      .form-row input[type="text"] {
+        flex: 3;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-right: 10px;
+        min-width: 200px;
+      }
+      .form-row input[type="datetime-local"] {
+        flex: 2;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-right: 10px;
+        min-width: 200px;
+      }
+      .form-row button {
+        padding: 10px 15px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+      .form-row button:hover {
+        background-color: #45a049;
+      }
+      .tasks-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .task-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-left: 5px solid #ddd;
+      }
+      .task-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+      .task-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+      }
+      .task-title {
+        font-weight: bold;
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .task-status {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      .task-status span {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        margin-bottom: 10px;
+        display: inline-block;
+      }
+      .status-pending {
+        background-color: #ffecb3;
+        color: #ff8f00;
+      }
+      .status-completed {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+      .task-status a {
+        color: #4caf50;
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #4caf50;
+        border-radius: 4px;
+        font-size: 12px;
+        transition: all 0.3s;
+        margin-left: 5px;
+      }
+      .task-status a:hover {
+        background-color: #4caf50;
+        color: white;
+      }
+      .task-status .edit-btn {
+        color: #2196f3;
+        border-color: #2196f3;
+      }
+      .task-status .edit-btn:hover {
+        background-color: #2196f3;
+        color: white;
+      }
+      .task-status .complete-btn {
+        color: #4caf50;
+        border-color: #4caf50;
+      }
+      .task-status .complete-btn:hover {
+        background-color: #4caf50;
+        color: white;
+      }
+      .task-times {
+        font-size: 12px;
+        color: #757575;
+        margin-top: 15px;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+      }
+      .task-times div {
+        margin-bottom: 5px;
+      }
+      .no-tasks {
+        text-align: center;
+        padding: 30px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        color: #757575;
+      }
+      .filter-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+      }
+      .filter-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .filter-group label {
+        margin-right: 10px;
+        font-weight: bold;
+      }
+      .filter-group select {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .admin-section {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .admin-section h2 {
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+      }
+      .admin-actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .admin-btn {
+        padding: 10px 15px;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 14px;
+      }
+      .admin-btn:hover {
+        background-color: #0b7dda;
+      }
+      .overdue-alert {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .overdue-alert i {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="user-info">
+          <div class="avatar">
+            {% if current_user.avatar %}
+            <img
+              src="{{ url_for('uploaded_file', filename=current_user.avatar) }}"
+              alt="Avatar"
+            />
+            {% else %}
+            <img
+              src="{{ url_for('static', filename='uploads/avatars/default_avatar.png') }}"
+              alt="Avatar mặc định"
+            />
+            {% endif %}
+            {% if overdue_count > 0 %}
+            <div class="overdue-badge" title="{{ overdue_count }} công việc trễ hạn">{{ overdue_count }}</div>
+            {% endif %}
+          </div>
+          <div class="user-actions">
+            <a href="{{ url_for('profile') }}" class="profile-link">Hồ sơ</a>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Đăng xuất</a>
+          </div>
+        </div>
+        <h1>Bảng Điều Khiển <span class="admin-badge">Admin</span></h1>
+        <div class="nav-links">
+          <a href="{{ url_for('admin_dashboard') }}">Bảng Điều Khiển</a>
+          <a href="{{ url_for('admin_users') }}">Quản Lý Người Dùng</a>
+        </div>
+      </div>
+
+      {% if overdue_count > 0 %}
+      <div class="overdue-alert">
+        <div>
+          <i class="fas fa-exclamation-circle"></i>
+          Bạn có {{ overdue_count }} công việc đã quá hạn cần xử lý!
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="admin-section">
+        <h2>Quản Lý Hệ Thống</h2>
+        <div class="admin-actions">
+          <a href="{{ url_for('admin_users') }}" class="admin-btn">Quản Lý Người Dùng</a>
+        </div>
+      </div>
+
+      <div class="task-form-card">
+        <h2>Thêm Nhiệm Vụ Mới</h2>
+        <form
+          method="POST"
+          action="{{ url_for('add_task') }}"
+          class="task-form"
+        >
+          <div class="form-row">
+            <input
+              type="text"
+              name="title"
+              placeholder="Nhiệm vụ mới"
+              required
+            />
+            <input type="datetime-local" name="deadline" />
+            <button type="submit">Thêm</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="filter-container">
+        <div class="filter-group">
+          <label for="status-filter">Lọc theo trạng thái:</label>
+          <select id="status-filter" onchange="filterTasks()">
+            <option value="all">Tất cả trạng thái</option>
+            <option value="Pending">Đang chờ</option>
+            <option value="Completed">Đã hoàn thành</option>
+          </select>
+        </div>
+      </div>
+
+      <h2>Nhiệm Vụ Của Bạn</h2>
+      <div class="tasks-container" id="tasks-container">
+        {% if tasks|length > 0 %} {% for task in tasks %}
+        <div
+          class="task-card"
+          data-status="{{ task.status }}"
+        >
+          <div class="task-header">
+            <div>
+              <div class="task-title">{{ task.title }}</div>
+            </div>
+            <div class="task-status">
+              {% if task.status == 'Pending' %}
+              <span class="status-pending">{{ task.status }}</span>
+              <a
+                href="{{ url_for('edit_task', task_id=task.id) }}"
+                class="edit-btn"
+                >Chỉnh sửa</a
+              >
+              <a
+                href="{{ url_for('complete_task', task_id=task.id) }}"
+                class="complete-btn"
+                >Hoàn thành</a
+              >
+              {% else %}
+              <span class="status-completed">{{ task.status }}</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="task-times">
+            <div>
+              <strong>Tạo lúc:</strong> {{ task.created_at.strftime('%d/%m/%Y
+              %H:%M') if task.created_at else 'N/A' }}
+            </div>
+            {% if task.deadline %}
+            <div>
+              <strong>Hạn chót:</strong> {{ task.deadline.strftime('%d/%m/%Y
+              %H:%M') }}
+            </div>
+            {% endif %} {% if task.finished_at %}
+            <div>
+              <strong>Hoàn thành:</strong> {{
+              task.finished_at.strftime('%d/%m/%Y %H:%M') }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <div class="no-tasks">
+          <p>Bạn chưa có nhiệm vụ nào. Hãy thêm nhiệm vụ mới!</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <script>
+      function filterTasks() {
+        const statusFilter = document.getElementById("status-filter").value;
+        const tasks = document.querySelectorAll(".task-card");
+
+        tasks.forEach((task) => {
+          const taskStatus = task.getAttribute("data-status");
+
+          const statusMatch =
+            statusFilter === "all" || taskStatus === statusFilter;
+
+          if (statusMatch) {
+            task.style.display = "block";
+          } else {
+            task.style.display = "none";
+          }
+        });
+
+        // Hiển thị thông báo nếu không có nhiệm vụ nào
+        const visibleTasks = document.querySelectorAll(
+          '.task-card[style="display: block;"]'
+        );
+        const noTasksElement = document.querySelector(".no-tasks");
+
+        if (visibleTasks.length === 0 && tasks.length > 0) {
+          if (!noTasksElement) {
+            const container = document.getElementById("tasks-container");
+            const newNoTasks = document.createElement("div");
+            newNoTasks.className = "no-tasks";
+            newNoTasks.innerHTML =
+              "<p>Không tìm thấy nhiệm vụ nào phù hợp với bộ lọc.</p>";
+            container.appendChild(newNoTasks);
+          } else {
+            noTasksElement.style.display = "block";
+            noTasksElement.innerHTML =
+              "<p>Không tìm thấy nhiệm vụ nào phù hợp với bộ lọc.</p>";
+          }
+        } else if (noTasksElement) {
+          noTasksElement.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>

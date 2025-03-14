@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Nhập</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .login-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px;
+      }
+      h2 {
+        color: #333;
+        text-align: center;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      input,
+      button {
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .links {
+        text-align: center;
+        margin-top: 15px;
+      }
+      .links a {
+        color: #4caf50;
+        text-decoration: none;
+      }
+      .error-message {
+        color: #f44336;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-card">
+      <h2>Đăng Nhập</h2>
+      {% if error %}
+      <div class="error-message">{{ error }}</div>
+      {% endif %}
+      <form method="POST">
+        <input
+          type="text"
+          name="username"
+          placeholder="Tên đăng nhập"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Mật khẩu"
+          required
+        />
+        <button type="submit">Đăng Nhập</button>
+      </form>
+      <div class="links">
+        <a href="{{ url_for('register') }}">Chưa có tài khoản? Đăng ký ngay</a>
+      </div>
+    </div>
+  </body>
+</html>
