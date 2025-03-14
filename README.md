@@ -43,7 +43,7 @@ cd ptud-gk-de-2
 2. Tạo môi trường ảo:
 ```
 python -m venv venv
-source venv/bin/activate  # Trên Windows: venv\Scripts\activate
+venv\Scripts\activate
 ```
 
 3. Cài đặt dependencies:
