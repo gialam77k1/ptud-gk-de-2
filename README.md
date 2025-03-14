@@ -26,19 +26,23 @@
 
 ## Cài đặt
 
+<<<<<<< HEAD
 ### Yêu cầu hệ thống
 
 - Python 3.8+
 - pip
 
 ### Các bước cài đặt
+=======
+>>>>>>> 3c250be9c584689be5c1ffa1b99df9900ebd7691
 
 1. Clone repository:
 ```
-git clone https://github.com/yourusername/task-management-system.git
-cd task-management-system
+git clone https://github.com/gialam77k1/ptud-gk-de-2.git
+cd ptud-gk-de-2
 ```
 
+<<<<<<< HEAD
 2. Tạo môi trường ảo:
 ```
 python -m venv venv
@@ -55,6 +59,8 @@ pip install -r requirements.txt
 flask run
 ```
 
+
+
 ## Sử dụng
 
 1. Truy cập ứng dụng tại địa chỉ `http://localhost:5000`
@@ -62,8 +68,3 @@ flask run
    - Username: admin
    - Password: admin123
 3. Thêm người dùng mới và quản lý công việc
-
-
-## Giấy phép
-
-Phần mềm này được phân phối dưới giấy phép MIT. Xem file `LICENSE` để biết thêm chi tiết.
