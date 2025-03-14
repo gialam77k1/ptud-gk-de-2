@@ -368,9 +368,7 @@
           <div class="avatar">
             {% if current_user.avatar %}
             <img
-              src="{{ current_user.avatar }}"
-              alt="Avatar"
-            />
+              src="{{ url_for('static', filename='uploads/avatars/' + current_user.avatar) }}" alt="Avatar" />
             {% else %}
             <img
               src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
@@ -378,7 +376,7 @@
             />
             {% endif %}
             {% if overdue_count > 0 %}
-            <div class="overdue-badge" title="{{ overdue_count }} công việc trễ hạn">{{ overdue_count }}</div>
+            <div class="overdue-badge">{{ overdue_count }}</div>
             {% endif %}
           </div>
           <div class="user-actions">
@@ -448,6 +446,12 @@
                 href="{{ url_for('edit_task', task_id=task.id) }}"
                 class="edit-btn"
                 >Chỉnh sửa</a
+              >
+              <a
+                href="{{ url_for('delete_task', task_id=task.id) }}"
+                class="delete-btn"
+                onclick="return confirm('Bạn có chắc chắn muốn xóa nhiệm vụ này?')"
+                >Xóa</a
               >
               <a
                 href="{{ url_for('complete_task', task_id=task.id) }}"
@@ -530,3 +534,12 @@
     </script>
   </body>
 </html>
+
+      .task-status .delete-btn {
+        color: #f44336;
+        border-color: #f44336;
+      }
+      .task-status .delete-btn:hover {
+        background-color: #f44336;
+        color: white;
+      }

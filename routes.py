@@ -264,12 +264,17 @@ def dashboard():
     ).all()
     
     # Tính số lượng task đã quá hạn
-    now = datetime.now()
+    now = datetime.now(timezone.utc)
     overdue_count = 0
     for task in tasks:
-        if task.deadline and task.deadline < now and task.status == 'Pending':
-            overdue_count += 1
+        if task.deadline:
+            # Convert task deadline to UTC for comparison
+            task_deadline = task.deadline.replace(tzinfo=timezone.utc)
+            if task_deadline < now and task.status == 'Pending':
+                overdue_count += 1
     
+    # Convert now to naive datetime for template comparison
+    now = now.replace(tzinfo=None)
     return render_template('dashboard.html', tasks=tasks, overdue_count=overdue_count, now=now)
 
 @app.route('/add_task', methods=['POST'])
@@ -399,3 +404,14 @@ def edit_task(task_id):
         return redirect(url_for('dashboard'))
     
     return render_template('edit_task.html', task=task, overdue_count=overdue_count)
+
+@app.route('/delete_task/<int:task_id>')
+@login_required
+def delete_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.user_id != current_user.id:
+        return redirect(url_for('dashboard'))
+    
+    db.session.delete(task)
+    db.session.commit()
+    return redirect(url_for('dashboard'))
