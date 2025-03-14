@@ -52,19 +52,6 @@
 
 ## Cài đặt
 
-### Cách 1: Sử dụng file setup.bat (Khuyến nghị)
-
-1. Tải xuống hoặc clone dự án về máy
-2. Chạy file `setup.bat` bằng cách nhấp đúp vào file hoặc mở Command Prompt và nhập:
-   ```
-   setup.bat
-   ```
-   ```
-3. Quá trình cài đặt sẽ tự động diễn ra, khởi động ứng dụng và mở trình duyệt web
-4. Trình duyệt web sẽ tự động mở trang ứng dụng tại địa chỉ http://localhost:5000
-5. Lưu ý: Các thông báo trong quá trình cài đặt sẽ hiển thị bằng tiếng Anh
-
-### Cách 2: Cài đặt thủ công
 
 1. Tải xuống hoặc clone dự án về máy
    ```
@@ -87,13 +74,7 @@
    ```
 7. Mở trình duyệt web và truy cập địa chỉ: http://localhost:5000
 
-### Chạy lại ứng dụng
 
-Sau khi đã cài đặt, bạn có thể chạy lại ứng dụng bằng cách:
-
-1. Chạy file `run_app.bat` (được tạo tự động sau lần cài đặt đầu tiên)
-2. Trình duyệt web sẽ tự động mở và ứng dụng sẽ khởi động
-3. Các thông báo trong file run_app.bat cũng sẽ hiển thị bằng tiếng Anh
 
 ## Sử dụng
 
@@ -112,6 +93,4 @@ Sau khi đã cài đặt, bạn có thể chạy lại ứng dụng bằng cách
 - `templates/`: Thư mục chứa các template HTML
 - `static/`: Thư mục chứa các file tĩnh (CSS, JS, hình ảnh)
 
-## Liên hệ
 
-Nếu bạn có bất kỳ câu hỏi hoặc góp ý nào, vui lòng liên hệ qua email: example@example.com
