@@ -6,26 +6,32 @@
     <title>Chỉnh Sửa Nhiệm Vụ</title>
     <style>
       body {
-        font-family: Arial, sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
         padding: 20px;
-        background-color: #f5f5f5;
+        background-color: #f8f9fa;
+        color: #343a40;
       }
       .container {
-        max-width: 800px;
+        max-width: 900px;
         margin: 0 auto;
         padding: 20px;
       }
       .header {
         background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 25px;
+        margin-bottom: 25px;
         position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .header:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
       }
       .user-info {
         position: absolute;
@@ -35,13 +41,18 @@
         align-items: center;
       }
       .avatar {
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         overflow: hidden;
-        margin-right: 10px;
-        border: 2px solid #4caf50;
+        margin-right: 12px;
+        border: 3px solid #4caf50;
         position: relative;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .avatar:hover {
+        transform: scale(1.1);
       }
       .avatar img {
         width: 100%;
@@ -70,77 +81,139 @@
       .user-actions a {
         margin-bottom: 5px;
         text-decoration: none;
-        font-size: 12px;
+        font-size: 13px;
+        transition: color 0.2s ease;
       }
       .profile-link {
         color: #4caf50;
       }
+      .profile-link:hover {
+        color: #388e3c;
+        text-decoration: underline;
+      }
       .logout-btn {
         color: #f44336;
       }
+      .logout-btn:hover {
+        color: #d32f2f;
+        text-decoration: underline;
+      }
       .nav-links {
         display: flex;
-        margin-top: 10px;
+        margin-top: 15px;
       }
       .nav-links a {
-        margin: 0 10px;
+        margin: 0 12px;
         text-decoration: none;
         color: #4caf50;
-        font-weight: bold;
+        font-weight: 600;
+        padding: 8px 15px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+      }
+      .nav-links a:hover {
+        background-color: #e8f5e9;
+        color: #2e7d32;
       }
       h1 {
         color: #333;
         text-align: center;
         margin-bottom: 20px;
+        font-weight: 600;
+        font-size: 28px;
       }
-      .edit-task-form {
+      .edit-form-card {
         background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 25px;
+        margin-bottom: 25px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .edit-form-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+      }
+      .edit-form {
+        display: flex;
+        flex-direction: column;
       }
       .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
       }
       .form-group label {
         display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #555;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
       }
-      .form-control {
+      .form-group input[type="text"],
+      .form-group input[type="datetime-local"] {
         width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-sizing: border-box;
+        padding: 12px 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
       }
-      .btn {
-        display: inline-block;
-        padding: 10px 20px;
+      .form-group input[type="text"]:focus,
+      .form-group input[type="datetime-local"]:focus {
+        border-color: #4caf50;
+        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        outline: none;
+      }
+      .form-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+      .form-actions button {
+        padding: 12px 20px;
         background-color: #4caf50;
         color: white;
         border: none;
-        border-radius: 4px;
+        border-radius: 8px;
         cursor: pointer;
-        text-decoration: none;
-        font-size: 16px;
-        margin-right: 10px;
+        font-weight: 600;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-size: 14px;
       }
-      .btn:hover {
-        background-color: #45a049;
+      .form-actions button:hover {
+        background-color: #388e3c;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
-      .btn-cancel {
+      .form-actions button:active {
+        transform: translateY(0);
+      }
+      .form-actions .cancel-btn {
+        background-color: #f5f5f5;
+        color: #333;
+      }
+      .form-actions .cancel-btn:hover {
+        background-color: #e0e0e0;
+      }
+      .form-actions .delete-btn {
         background-color: #f44336;
       }
-      .btn-cancel:hover {
+      .form-actions .delete-btn:hover {
         background-color: #d32f2f;
       }
-      .actions {
-        margin-top: 20px;
-        display: flex;
-        justify-content: flex-end;
+      .task-info {
+        background-color: #e8f5e9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-left: 4px solid #4caf50;
+      }
+      .task-info p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #333;
+      }
+      .task-info .label {
+        font-weight: 600;
+        color: #2e7d32;
       }
       .overdue-alert {
         background-color: #ffebee;
@@ -164,12 +237,12 @@
           <div class="avatar">
             {% if current_user.avatar %}
             <img
-              src="{{ url_for('uploaded_file', filename=current_user.avatar) }}"
+              src="{{ current_user.avatar }}"
               alt="Avatar"
             />
             {% else %}
             <img
-              src="{{ url_for('static', filename='uploads/avatars/default_avatar.png') }}"
+              src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
               alt="Avatar mặc định"
             />
             {% endif %}
@@ -197,7 +270,7 @@
       </div>
       {% endif %}
 
-      <div class="edit-task-form">
+      <div class="edit-form-card">
         <form method="POST">
           <div class="form-group">
             <label for="title">Tiêu đề</label>
@@ -220,7 +293,7 @@
               value="{% if task.deadline %}{{ task.deadline|adjust_timezone|strftime('%Y-%m-%dT%H:%M') }}{% endif %}"
             />
           </div>
-          <div class="actions">
+          <div class="form-actions">
             <a href="{{ url_for('dashboard') }}" class="btn btn-cancel"
               >Hủy bỏ</a
             >

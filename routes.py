@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, send_from_directory, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from models import db, User, Task, Category
+from models import db, User, Task
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime, timezone, timedelta
@@ -112,7 +112,8 @@ def register():
         
         # Tạo user mới
         hashed_password = generate_password_hash(password)
-        user = User(username=username, password=hashed_password, role=role)
+        avatar_url = f"https://avatar-placeholder.iran.liara.run/username/{username}"
+        user = User(username=username, password=hashed_password, role=role, avatar=avatar_url)
         db.session.add(user)
         db.session.commit()
         
@@ -247,9 +248,6 @@ def admin_delete_user(user_id):
     # Xóa tất cả các task của user
     Task.query.filter_by(user_id=user.id).delete()
     
-    # Xóa tất cả các category của user
-    Category.query.filter_by(user_id=user.id).delete()
-    
     # Xóa user
     db.session.delete(user)
     db.session.commit()
@@ -349,66 +347,6 @@ def profile():
 @app.route('/uploads/avatars/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
-@app.route('/categories')
-@login_required
-def categories():
-    categories = Category.query.filter_by(user_id=current_user.id).all()
-    return render_template('categories.html', categories=categories, default_colors=DEFAULT_COLORS)
-
-@app.route('/add_category', methods=['POST'])
-@login_required
-def add_category():
-    name = request.form['name']
-    color = request.form['color']
-    
-    # Kiểm tra xem tên danh mục đã tồn tại chưa
-    existing_category = Category.query.filter_by(name=name, user_id=current_user.id).first()
-    if existing_category:
-        return redirect(url_for('categories', error="Tên danh mục đã tồn tại!"))
-    
-    category = Category(name=name, color=color, user_id=current_user.id)
-    db.session.add(category)
-    db.session.commit()
-    
-    return redirect(url_for('categories'))
-
-@app.route('/edit_category/<int:category_id>', methods=['POST'])
-@login_required
-def edit_category(category_id):
-    category = Category.query.filter_by(id=category_id, user_id=current_user.id).first_or_404()
-    
-    name = request.form['name']
-    color = request.form['color']
-    
-    # Kiểm tra xem tên danh mục đã tồn tại chưa (trừ danh mục hiện tại)
-    existing_category = Category.query.filter(
-        Category.name == name,
-        Category.user_id == current_user.id,
-        Category.id != category_id
-    ).first()
-    
-    if existing_category:
-        return redirect(url_for('categories', error="Tên danh mục đã tồn tại!"))
-    
-    category.name = name
-    category.color = color
-    db.session.commit()
-    
-    return redirect(url_for('categories'))
-
-@app.route('/delete_category/<int:category_id>')
-@login_required
-def delete_category(category_id):
-    category = Category.query.filter_by(id=category_id, user_id=current_user.id).first_or_404()
-    
-    # Cập nhật các task thuộc danh mục này về null
-    Task.query.filter_by(category_id=category.id).update({Task.category_id: None})
-    
-    db.session.delete(category)
-    db.session.commit()
-    
-    return redirect(url_for('categories'))
 
 @app.route('/reset_admin_password')
 def reset_admin_password():

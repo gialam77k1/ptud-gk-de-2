@@ -59,6 +59,7 @@
    ```
    setup.bat
    ```
+   ```
 3. Quá trình cài đặt sẽ tự động diễn ra, khởi động ứng dụng và mở trình duyệt web
 4. Trình duyệt web sẽ tự động mở trang ứng dụng tại địa chỉ http://localhost:5000
 5. Lưu ý: Các thông báo trong quá trình cài đặt sẽ hiển thị bằng tiếng Anh

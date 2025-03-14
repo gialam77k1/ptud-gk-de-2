@@ -13,16 +13,6 @@ class User(db.Model, UserMixin):
     
     # Relationship
     tasks = db.relationship('Task', backref='user', lazy=True)
-    categories = db.relationship('Category', backref='user', lazy=True)
-
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    color = db.Column(db.String(20), nullable=False, default='#4caf50')  # Màu mặc định là xanh lá
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    
-    # Relationship
-    tasks = db.relationship('Task', backref='category', lazy=True)
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -32,4 +22,3 @@ class Task(db.Model):
     deadline = db.Column(db.DateTime, nullable=True)
     finished_at = db.Column(db.DateTime, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=True)
