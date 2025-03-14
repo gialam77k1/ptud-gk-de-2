@@ -26,15 +26,13 @@
 
 ## Cài đặt
 
-<<<<<<< HEAD
 ### Yêu cầu hệ thống
 
 - Python 3.8+
 - pip
 
 ### Các bước cài đặt
-=======
->>>>>>> 3c250be9c584689be5c1ffa1b99df9900ebd7691
+
 
 1. Clone repository:
 ```
