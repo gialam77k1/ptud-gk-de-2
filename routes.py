@@ -4,7 +4,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from models import db, User, Task, Category
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import os
 import uuid
 
@@ -13,24 +13,31 @@ app.config.from_object('config.Config')
 db.init_app(app)
 login_manager = LoginManager(app)
 
+# Hàm helper để điều chỉnh múi giờ
+def adjust_timezone(dt):
+    if dt is None:
+        return None
+    # Nếu dt không có múi giờ, giả định nó là UTC
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    # Chuyển đổi sang múi giờ Việt Nam (UTC+7)
+    vietnam_tz = timezone(timedelta(hours=7))
+    return dt.astimezone(vietnam_tz)
+
+# Hàm helper để định dạng thời gian
+def format_datetime(dt, format='%d/%m/%Y %H:%M'):
+    if dt is None:
+        return ''
+    return dt.strftime(format)
+
+# Đăng ký các hàm helper với Jinja2
+app.jinja_env.filters['adjust_timezone'] = adjust_timezone
+app.jinja_env.filters['strftime'] = format_datetime
+
 # Cấu hình upload file
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads', 'avatars')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# Danh sách màu mặc định cho danh mục
-DEFAULT_COLORS = [
-    '#4caf50',  # Xanh lá
-    '#2196f3',  # Xanh dương
-    '#f44336',  # Đỏ
-    '#ff9800',  # Cam
-    '#9c27b0',  # Tím
-    '#795548',  # Nâu
-    '#607d8b',  # Xám xanh
-    '#e91e63',  # Hồng
-    '#009688',  # Xanh ngọc
-    '#ffeb3b',  # Vàng
-]
 
 # Tạo tài khoản admin cố định nếu chưa tồn tại
 def create_admin_account():
@@ -175,9 +182,7 @@ def admin_required(f):
 def admin_dashboard():
     # Lấy tất cả các task của admin và sắp xếp theo deadline
     tasks = Task.query.filter_by(user_id=current_user.id).order_by(
-        # Đặt các task không có deadline xuống cuối
         Task.deadline.is_(None).asc(),
-        # Sắp xếp các task có deadline từ gần nhất đến xa nhất
         Task.deadline.asc()
     ).all()
     
@@ -188,7 +193,7 @@ def admin_dashboard():
         if task.deadline and task.deadline < now and task.status == 'Pending':
             overdue_count += 1
     
-    return render_template('admin/dashboard.html', tasks=tasks, overdue_count=overdue_count)
+    return render_template('admin/dashboard.html', tasks=tasks, overdue_count=overdue_count, now=now)
 
 @app.route('/admin/users')
 @login_required
@@ -255,11 +260,8 @@ def admin_delete_user(user_id):
 @login_required
 def dashboard():
     # Lấy tất cả các task của người dùng và sắp xếp theo deadline
-    # Các task không có deadline sẽ được đặt ở cuối danh sách
     tasks = Task.query.filter_by(user_id=current_user.id).order_by(
-        # Đặt các task không có deadline xuống cuối
         Task.deadline.is_(None).asc(),
-        # Sắp xếp các task có deadline từ gần nhất đến xa nhất
         Task.deadline.asc()
     ).all()
     
@@ -270,7 +272,7 @@ def dashboard():
         if task.deadline and task.deadline < now and task.status == 'Pending':
             overdue_count += 1
     
-    return render_template('dashboard.html', tasks=tasks, overdue_count=overdue_count)
+    return render_template('dashboard.html', tasks=tasks, overdue_count=overdue_count, now=now)
 
 @app.route('/add_task', methods=['POST'])
 @login_required
@@ -282,8 +284,14 @@ def add_task():
     
     if deadline_str and deadline_str.strip():
         try:
-            deadline = datetime.fromisoformat(deadline_str)
-            task.deadline = deadline
+            # Chuyển đổi thời gian từ form thành UTC trước khi lưu vào database
+            local_deadline = datetime.fromisoformat(deadline_str)
+            # Thêm múi giờ Việt Nam vào thời gian local
+            local_deadline = local_deadline.replace(tzinfo=timezone(timedelta(hours=7)))
+            # Chuyển đổi sang UTC để lưu vào database
+            utc_deadline = local_deadline.astimezone(timezone.utc)
+            # Lưu thời gian không có thông tin múi giờ
+            task.deadline = utc_deadline.replace(tzinfo=None)
         except ValueError:
             # Nếu định dạng không hợp lệ, bỏ qua
             pass
@@ -434,8 +442,14 @@ def edit_task(task_id):
         
         if deadline_str and deadline_str.strip():
             try:
-                deadline = datetime.fromisoformat(deadline_str)
-                task.deadline = deadline
+                # Chuyển đổi thời gian từ form thành UTC trước khi lưu vào database
+                local_deadline = datetime.fromisoformat(deadline_str)
+                # Thêm múi giờ Việt Nam vào thời gian local
+                local_deadline = local_deadline.replace(tzinfo=timezone(timedelta(hours=7)))
+                # Chuyển đổi sang UTC để lưu vào database
+                utc_deadline = local_deadline.astimezone(timezone.utc)
+                # Lưu thời gian không có thông tin múi giờ
+                task.deadline = utc_deadline.replace(tzinfo=None)
             except ValueError:
                 # Nếu định dạng không hợp lệ, bỏ qua
                 pass

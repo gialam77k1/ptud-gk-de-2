@@ -217,7 +217,7 @@
               id="deadline"
               name="deadline"
               class="form-control"
-              value="{% if task.deadline %}{{ task.deadline.strftime('%Y-%m-%dT%H:%M') }}{% endif %}"
+              value="{% if task.deadline %}{{ task.deadline|adjust_timezone|strftime('%Y-%m-%dT%H:%M') }}{% endif %}"
             />
           </div>
           <div class="actions">
